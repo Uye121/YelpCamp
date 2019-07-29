@@ -1,0 +1,28 @@
+<% include partials/header %>
+<div class="container">
+  <header class="jumbotron">
+    <div class="container">
+      <h1>Welcome to YC!</h1>
+      <p>
+        View the awesome campgrounds that others like yourself have uploaded!
+      </p>
+      <p>
+        <a href="/campgrounds/new" class="btn btn-primary btn-lg">Add new campground</a>
+      </p>
+    </div>
+  </header>
+  <div class="row text-center" style="display: flex; flex-wrap: wrap;">
+    <% campgrounds.forEach((cg) => { %>
+      <div class="col-md-3 col-sm-6">
+        <div class="thumbnail">
+          <img src="<%= cg.image %>" alt="<%= cg.name %> image">
+          <div class="caption">
+            <h4><%= cg.name %></h4>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+<% include partials/footer %>
