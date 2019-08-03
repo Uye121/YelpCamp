@@ -52,18 +52,36 @@ router.get("/:id", function(req, res) {
 
 // EDIT - show edit form
 router.get("/:id/edit", function(req, res) {
+  // Problem here somewhere or in the edit.ejs page
   Campground.findById(req.params.id, function(err, foundCg) {
     if(err) {
       res.redirect("/campgrounds");
     } else {
-      res.render("edit", {campground: foundCg});
+      res.render("campgrounds/edit", {campground: foundCg});
     }
-  })
+  });
 });
 
 // UPDATE - update the data, then redirect
 router.put("/:id", function(req, res) {
-  Campground.findByIdAndUpdate(req.params.id, req.body)
+  Campground.findByIdAndUpdate(req.params.id, req.body.campground, function(err, updatedCg) {
+    if(err) {
+      res.redirect("/campgrounds");
+    } else {
+      res.redirect("/campgrounds/"+req.params.id);
+    }
+  });
+});
+
+// DESTROY - delete campground route
+router.delete("/:id", function(req, res) {
+  Campground.findByIdAndRemove(req.params.id, function(err) {
+    if(err) {
+      res.redirect("/campgrounds");
+    } else {
+      res.redirect("/campgrounds");
+    }
+  });
 });
 
 // middleware
