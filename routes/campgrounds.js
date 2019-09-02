@@ -3,6 +3,8 @@ var router = express.Router();
 var Campground = require("../models/campground");
 var middleware = require("../middleware");
 var multer = require("multer");
+var NodeGeocoder = require('node-geocoder');
+
 var storage = multer.diskStorage({
   filename: function(req, file, callback) {
     callback(null, Date.now()+file.originalname);
@@ -22,6 +24,15 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
+ 
+var options = {
+  provider: 'google',
+  httpAdapter: 'https',
+  apiKey: process.env.GEOCODER_API_KEY,
+  formatter: null
+};
+ 
+var geocoder = NodeGeocoder(options);
 
 /* INDEX - show all data */
 router.get("/", function(req, res) {
@@ -48,13 +59,26 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
       id: req.user._id,
       username: req.user.username
     }
-    Campground.create(req.body.campground, function(err, newCampground) {
-      if(err) {
-        req.flash('error', err.message);
-        res.redirect('back');
-      } else {
-        res.redirect("/campgrounds/"+newCampground.id);
-      }
+
+    geocoder.geocode(req.body.location, (err, data) => {
+      if(err) throw err;
+
+      let lat = data[0].latitude,
+          lng = data[0].longitude,
+          location = data[0].formattedAddress;
+
+      req.body.campground.lat = lat;
+      req.body.campground.lng = lng;
+      req.body.campground.location = location;
+
+      Campground.create(req.body.campground, function(err, newCampground) {
+        if(err) {
+          req.flash('error', err.message);
+          res.redirect('back');
+        } else {
+          res.redirect("/campgrounds/"+newCampground.id);
+        }
+      });
     });
   })
 });
@@ -104,10 +128,18 @@ router.put("/:id", middleware.checkCampgroundOwnership, upload.single('image'), 
           return res.redirect("back");
         }
       }
-      campground.name = req.body.campground.name;
-      campground.description = req.body.campground.description;
-      campground.save();
-      res.redirect("/campgrounds/"+req.params.id);
+
+      geocoder.geocode(req.body.location, function (err, data) {
+        if(err) throw err;
+
+        campground.lat = data[0].latitude;
+        campground.lng = data[0].longitude;
+        campground.location = data[0].formattedAddress;
+        campground.name = req.body.campground.name;
+        campground.description = req.body.campground.description;
+        campground.save();
+        res.redirect("/campgrounds/"+req.params.id);
+      });
     }
   });
 });
