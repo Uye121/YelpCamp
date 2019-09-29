@@ -9,13 +9,13 @@ var flash = require("connect-flash");
 var Campground = require("./models/campground");
 var Comment = require("./models/comment");
 var User = require("./models/user");
-var seedDB = require("./seeds");
+var seedDB = require("../seeds");
 const dotenv = require('dotenv').config();
 
 // required routes
-var commentRoutes = require("./routes/comments"),
-    campgroundRoutes = require("./routes/campgrounds"),
-    indexRoutes = require("./routes/index");
+var commentRoutes = require("../routes/comments"),
+    campgroundRoutes = require("../routes/campgrounds"),
+    indexRoutes = require("../routes/index");
 
 mongoose.connect(process.env.DATABASEURL, { useNewUrlParser: true, useCreateIndex: true }).then(() => {
   console.log("connected to DB");

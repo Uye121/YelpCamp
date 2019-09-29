@@ -1,6 +1,6 @@
 var middlewareObj = {};
-var Campground = require("../models/campground");
-var Comment = require("../models/comment");
+var Campground = require("../backend/models/campground");
+var Comment = require("../backend/models/comment");
 
 middlewareObj.isLoggedIn = function(req, res, next) {
   if(req.isAuthenticated()) {
