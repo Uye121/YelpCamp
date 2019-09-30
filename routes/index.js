@@ -5,7 +5,9 @@ var User = require("../backend/models/user");
 
 // root route
 router.get("/", function(req, res) {
-  res.render("landing");
+  console.log("rendering landing");
+  req.flash("error", "testing flash");
+  res.render("Landing");
 });
 
 // show register route
