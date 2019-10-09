@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './views/partials/Header';
 import { BrowserRouter as Router, Route} from "react-router-dom";
 
@@ -7,11 +7,10 @@ import { CampgroundsContainer } from './components/CampgroundsContainer';
 
 function App() {
   const [display, setDisplay] = useState(false);
-  
-  window.onhashchange = function() {
-    console.log("has change");
+
+  useEffect(() => {
     setDisplay(() => window.location.pathname === '/'? false: true);
-  }
+  }, []);
 
   return (
     <Router>
