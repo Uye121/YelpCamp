@@ -6,16 +6,17 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var methodOverride = require("method-override");
 var flash = require("connect-flash");
-var Campground = require("./models/campground");
-var Comment = require("./models/comment");
+var cors = require("cors");
+// var Campground = require("./models/campground");
+// var Comment = require("./models/comment");
 var User = require("./models/user");
-var seedDB = require("../seeds");
+// var seedDB = require("../seeds");
 const dotenv = require('dotenv').config();
 
 // required routes
-var commentRoutes = require("../routes/comments"),
-    campgroundRoutes = require("../routes/campgrounds"),
-    indexRoutes = require("../routes/index");
+var commentRoutes = require("./routes/comments"),
+    campgroundRoutes = require("./routes/campgrounds"),
+    indexRoutes = require("./routes/index");
 
 mongoose.connect(process.env.DATABASEURL, { useNewUrlParser: true, useCreateIndex: true }).then(() => {
   console.log("connected to DB");
@@ -23,6 +24,7 @@ mongoose.connect(process.env.DATABASEURL, { useNewUrlParser: true, useCreateInde
   console.log(err);
 });
 
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
@@ -50,12 +52,10 @@ app.use(function(req, res, next) {
   next();
 })
 
-app.use("/", indexRoutes, () => {
-  alert("rendering index route");
-});
+app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
-app.listen(process.env.PORT || 3000, process.env.IP, function(req, res) {
+app.listen(process.env.PORT || 5000, process.env.IP, function(req, res) {
   console.log("YelpCamp server has started!");
 });

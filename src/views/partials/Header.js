@@ -8,14 +8,20 @@ export const Header = ({
 }) => {
   const [activePage, setActivePage] = useState('home');
   console.log(display);
+
   if(display) {
-    console.log("Yes header");
     return (
       <header data-testid="header">
         <nav className="navbar navbar-default">
           <div className="container">
             <div className="navbar-header">
-              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <button 
+                type="button" 
+                className="navbar-toggle collapsed" 
+                data-toggle="collapse" 
+                data-target="#navbar" aria-expanded="false" 
+                aria-controls="navbar"
+              >
                 <span className="sr-only">Toggle navigation</span>
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
@@ -66,7 +72,6 @@ export const Header = ({
       </header>
     )
   } else {
-    console.log("No header");
     return null;
   }
 }

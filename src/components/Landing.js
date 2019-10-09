@@ -12,8 +12,8 @@ export const Landing = () => {
           className="btn btn-lg btn-success"
           data-testid="view-camp"
           type="button"
-          onClick={() => this.location.href="/campgrounds"}
-          onKeyDown={() => this.location.href="/campgrounds"}
+          onClick={() => window.location.href="/campgrounds"}
+          onKeyDown={() => window.location.href="/campgrounds"}
         >
           View All Campgrounds
         </button>
