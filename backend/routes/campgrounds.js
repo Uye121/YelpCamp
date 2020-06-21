@@ -48,7 +48,10 @@ router.get("/", function(req, res) {
 });
 
 /* CREATE - add new data to database */
-router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, res) {
+router.post("/", /*middleware.isLoggedIn,*/ upload.single('image'), function(req, res) {
+  console.log("posting to server...");
+  console.log("req body: ", req.body);
+  return res.json("request does not have body");
   cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
     if(err) {
       req.flash('error', err.message);
@@ -88,9 +91,9 @@ router.post("/", middleware.isLoggedIn, upload.single('image'), function(req, re
 });
 
 /* NEW - show form to create new data */
-router.get("/new", middleware.isLoggedIn, function(req, res) {
-  res.render("campgrounds/new");
-});
+// router.get("/new", middleware.isLoggedIn, function(req, res) {
+//   res.render("campgrounds/new");
+// });
 
 /* SHOW - show more info about one data */
 router.get("/:id", function(req, res) {
